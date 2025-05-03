@@ -1,29 +1,32 @@
 import axios from 'axios';
 import React, { useState } from 'react';
-import { FaUser, FaPhone, FaEnvelope, FaMapMarkerAlt, FaBuilding, FaMoneyBillWave } from 'react-icons/fa';
+import { FaUser, FaPhone, FaEnvelope, FaMapMarkerAlt } from 'react-icons/fa';
 
-export default function AgregarEmpleado({ onClose }) {
-    const [empleado, setEmpleados] = useState({
+
+export default function AgregarCliente({ onClose }) {
+    const [cliente, setCliente] = useState({
         apellido: "",
         nombre: "",
-        sueldo: "",
-        direccion: "",
         telefono: "",
+        direccion: "",
         email: "",
-        area: ""
     });
 
-    const { apellido, nombre, area, sueldo, direccion, telefono, email } = empleado;
+    const { apellido, nombre, telefono, direccion, email } = cliente;
 
     const onInputChange = (e) => {
-        setEmpleados({ ...empleado, [e.target.name]: e.target.value });
+        setCliente({ ...cliente, [e.target.name]: e.target.value });
     };
 
     const onSubmit = async (e) => {
         e.preventDefault();
-        const urlBackend = "http://localhost:8080/rrhh-app/empleados";
-        await axios.post(urlBackend, empleado);
-        if (onClose) onClose(); // Cierra el modal
+        const urlBackend = "http://localhost:8080/rrhh-app/cliente";
+        try {
+            await axios.post(urlBackend, cliente);
+            if (onClose) onClose(); // Cierra el modal si se pasó la prop
+        } catch (error) {
+            console.error("Error al guardar el cliente:", error);
+        }
     };
 
     return (
@@ -49,30 +52,17 @@ export default function AgregarEmpleado({ onClose }) {
                             value={telefono} onChange={onInputChange} name="telefono" />
                     </div>
                     <div className="col-md-6 mb-3">
-                        <label htmlFor="email" className="form-label"><FaEnvelope className="me-2" />Correo electrónico</label>
-                        <input type="email" className="form-control" id="email" placeholder="Correo electrónico"
-                            value={email} onChange={onInputChange} name="email" />
-                    </div>
-                </div>
-
-                <div className="row">
-                    <div className="col-md-6 mb-3">
                         <label htmlFor="direccion" className="form-label"><FaMapMarkerAlt className="me-2" />Dirección</label>
                         <input type="text" className="form-control" id="direccion" placeholder="Dirección"
                             value={direccion} onChange={onInputChange} name="direccion" />
                     </div>
-                    <div className="col-md-6 mb-3">
-                        <label htmlFor="area" className="form-label"><FaBuilding className="me-2" />Área</label>
-                        <input type="text" className="form-control" id="area" placeholder="Área o departamento"
-                            value={area} onChange={onInputChange} name="area" />
-                    </div>
                 </div>
 
                 <div className="row">
                     <div className="col-md-6 mb-3">
-                        <label htmlFor="sueldo" className="form-label"><FaMoneyBillWave className="me-2" />Sueldo</label>
-                        <input type="number" className="form-control" id="sueldo" placeholder="Sueldo mensual"
-                            value={sueldo} onChange={onInputChange} name="sueldo" />
+                        <label htmlFor="email" className="form-label"><FaEnvelope className="me-2" />Correo electrónico</label>
+                        <input type="email" className="form-control" id="email" placeholder="Correo electrónico"
+                            value={email} onChange={onInputChange} name="email" />
                     </div>
                 </div>
 
